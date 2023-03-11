@@ -1,0 +1,6 @@
+1. grab the data from the column in open insider and store all the different cluster buys along with their corresponing data together
+
+2. grab stock history from using an excel function with the specific dates that the cluster buy was done. 
+   and turn it into a csv to be able to read it using python. Problem is how do I turn it into a csv automatically?
+
+3. After we get the stock data, we will need to perform some math to determine correlations. Don't really know about what to do with that yet
