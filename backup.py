@@ -1,3 +1,5 @@
+# This program grabs data via web scraping from openinsider.com and converts the data into a csv file for easy manipulation with the pandas library
+
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -16,6 +18,7 @@ data_list = [] # Initiate an empty list which will eventually contain lists of e
 for tr_tag in tr_tags: 
     
     td_tags = tr_tag.find_all("td") # Each column of the purchase has its own td tag. the find_all method creates a list of all the td tags within the given tr tag
+    
     filing_date = td_tags[1].text       # 0
     trade_date = td_tags[2].text        # 1
     ticker_symbol = td_tags[3].text     # 2
@@ -29,7 +32,22 @@ for tr_tag in tr_tags:
     
     row = [filing_date, trade_date, ticker_symbol, company_name, insider_title, price_bought, qty_in_shares, now_owned, delta_owned, delta_value]
     data_list.append(row) # Creating a list of lists so that we can format it into a csv file
+
+    for lst in data_list:
+        print(lst)
     
-    with open("C:\Stock-Trading-Algorithm\scraping_data.csv", "w", newline = "") as f:
-        writer = csv.writer(f)
-        writer.writerows(data_list) # turns the list of lists into a csv file called "scraping_data.csv". File will be overwritten if program runs again
+#    with open("C:\Stock-Trading-Algorithm\scraping_data.csv", "w", newline = "") as f:
+#        writer = csv.writer(f)
+#        writer.writerows(data_list) # Turns the list of lists into a csv file called "scraping_data.csv". File will be overwritten if program runs again
+
+av_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=ENVX&interval=15min&slice=year1month1&apikey=OHLMGAI6A5CXX9Q3'
+
+# Program copied from Alpha Vantage to take data about any stock. Use the CSV_URL to change the stock, interval, slice
+with requests.Session() as s:
+    download = s.get(av_url)
+    decoded_content = download.content.decode('utf-8')
+    cr = csv.reader(decoded_content.splitlines(), delimiter=',')
+    stock_list = list(cr)
+    for row in stock_list:
+        if "2023-02-17 15" in row[0]:
+            print(row)
