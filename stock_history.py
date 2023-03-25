@@ -1,14 +1,24 @@
-## Alpha vintage
 import csv
 import requests
+import string
 
-# replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-CSV_URL = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=MRBK&interval=15min&slice=year1month1&apikey=OHLMGAI6A5CXX9Q3'
+scraping_data_name = 'test_samples/test_sample_5.csv'
 
-with requests.Session() as s:
-    download = s.get(CSV_URL)
-    decoded_content = download.content.decode('utf-8')
-    cr = csv.reader(decoded_content.splitlines(), delimiter=',')
-    my_list = list(cr)
-    for row in my_list:
-        print(row)
+with open(scraping_data_name, 'r') as csvfile:
+    datareader = csv.reader(csvfile)
+    for row in datareader:
+        ticker_symbol = row[2].strip()
+        filing_date = row[0].replace(" ", "_").replace(":", "-")
+        
+        csv_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=' + ticker_symbol + '&interval=15min&slice=year1month1&apikey=OHLMGAI6A5CXX9Q3'
+        csv_filename = ticker_symbol + "___" + filing_date + ".csv"
+        directory = "C:/Stock-Trading-Algorithm/stock_data/" + csv_filename
+        
+        with requests.Session() as s:
+            download = s.get(csv_url)
+            decoded_content = download.content.decode('utf-8')
+            cr = csv.reader(decoded_content.splitlines(), delimiter=',')
+            my_list = list(cr)
+            with open(directory, "w", newline = "") as f:
+                writer = csv.writer(f)
+                writer.writerows(my_list)

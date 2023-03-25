@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-URL = "http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=730&fdr=&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=25&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=1&cnt=100&page=1"
+URL = "http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=730&fdr=&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=25&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=1&cnt=100&page=3"
 
 page_text = requests.get(URL).text # Request to access the website
 
@@ -32,22 +32,8 @@ for tr_tag in tr_tags:
     
     row = [filing_date, trade_date, ticker_symbol, company_name, insider_title, price_bought, qty_in_shares, now_owned, delta_owned, delta_value]
     data_list.append(row) # Creating a list of lists so that we can format it into a csv file
-
-    for lst in data_list:
-        print(lst)
+    print(row)
     
-#    with open("C:\Stock-Trading-Algorithm\scraping_data.csv", "w", newline = "") as f:
-#        writer = csv.writer(f)
-#        writer.writerows(data_list) # Turns the list of lists into a csv file called "scraping_data.csv". File will be overwritten if program runs again
-
-av_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=ENVX&interval=15min&slice=year1month1&apikey=OHLMGAI6A5CXX9Q3'
-
-# Program copied from Alpha Vantage to take data about any stock. Use the CSV_URL to change the stock, interval, slice
-with requests.Session() as s:
-    download = s.get(av_url)
-    decoded_content = download.content.decode('utf-8')
-    cr = csv.reader(decoded_content.splitlines(), delimiter=',')
-    stock_list = list(cr)
-    for row in stock_list:
-        if "2023-02-17 15" in row[0]:
-            print(row)
+    with open("C:\Stock-Trading-Algorithm\scraping_data.csv", "w", newline = "") as f:
+        writer = csv.writer(f)
+        writer.writerows(data_list) # Turns the list of lists into a csv file called "scraping_data.csv". File will be overwritten if program runs again
