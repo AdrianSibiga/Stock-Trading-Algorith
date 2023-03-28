@@ -1,8 +1,9 @@
 import csv
 import requests
 import string
+import time
 
-scraping_data_name = 'test_samples/test_sample_5.csv'
+scraping_data_name = 'test_samples/test_sample_100_(2-14-23_2-17-23).csv'
 
 with open(scraping_data_name, 'r') as csvfile:
     datareader = csv.reader(csvfile)
@@ -22,3 +23,4 @@ with open(scraping_data_name, 'r') as csvfile:
             with open(directory, "w", newline = "") as f:
                 writer = csv.writer(f)
                 writer.writerows(my_list)
+        time.sleep(15)
