@@ -12,6 +12,7 @@ with open(purchase_file, 'r') as csvfile:
     datareader = csv.reader(csvfile)
     for row in datareader:
         filing_date = row[0]
+        ticker_symbol = row[2]
         
         # initiate lists
         date = []
@@ -29,8 +30,11 @@ with open(purchase_file, 'r') as csvfile:
         
         # puts the filing date into the datetime system so that we can do easy date manipulations by days, months, hours, etc.
         filing_date = datetime.datetime.fromisoformat(date+"T"+clock)
-
-
+        # creates a stock_data_file for iterating through the times for each stock
+        stock_data_file = 'stock_data/'+ticker_symbol.strip(" ")+'___'+date+'_'+clock.replace(":", "-")
+        
+        
+        print(stock_data_file)
 # with open(stock_data_file, 'r') as csvfile:
 #     datareader = csv.reader(csvfile)
 #     for row in datareader:
