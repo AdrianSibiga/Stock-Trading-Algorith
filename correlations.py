@@ -4,8 +4,6 @@ import time
 import datetime
 
 purchase_file = 'test_samples/test_sample_5.csv'
-stock_data_file = 'stock_data/AFBI___2023-02-16_12-27-07.csv'
-
 
 # finds filing dates of each purchase in the purchase file and turns them into strings
 with open(purchase_file, 'r') as csvfile:
@@ -24,18 +22,44 @@ with open(purchase_file, 'r') as csvfile:
         for i in range(11,19):
             clock.append(filing_date[i])
         
-        # turns the lists of characters into strings
+
+        # turns the lists of characters into strings for finding the file
+        date_name = "".join(date)
+        clock_name = "".join(clock)
+
+        # creates a stock_data_file for iterating through the times for each stock
+        stock_data_file = 'stock_data/'+ticker_symbol.strip(" ")+'___'+date_name+'_'+clock_name.replace(":", "-")+'.csv'
+
+        # round the minute to the nearest 15 minute interval
+        minute = int(clock[3]+clock[4])
+        if (0 <= minute <= 14):
+            clock[3] = '0'
+            clock[4] = '0'
+        elif (15 <= minute <= 29):
+            clock[3] = '1'
+            clock[4] = '5'
+        elif (30 <= minute <= 44):
+            clock[3] = '3'
+            clock[4] = '0'
+        elif (45 <= minute <= 59):
+            clock[3] = '4'
+            clock[4] = '5'
+        
+        # seconds = 00
+        clock[6] = '0'
+        clock[7] = '0'
+
+        # turns the lists of characters into strings with the rounded minutes and 00 seconds
         date = "".join(date)
         clock = "".join(clock)
         
         # puts the filing date into the datetime system so that we can do easy date manipulations by days, months, hours, etc.
-        filing_date = datetime.datetime.fromisoformat(date+"T"+clock)
-        # creates a stock_data_file for iterating through the times for each stock
-        stock_data_file = 'stock_data/'+ticker_symbol.strip(" ")+'___'+date+'_'+clock.replace(":", "-")
-        
-        
-        print(stock_data_file)
-# with open(stock_data_file, 'r') as csvfile:
-#     datareader = csv.reader(csvfile)
-#     for row in datareader:
+        filing_date_time = datetime.datetime.fromisoformat(date+"T"+clock)
+        print(filing_date_time)
+
+        with open(stock_data_file, 'r') as csvfile:
+            datareader = csv.reader(csvfile)
+            for row in datareader:
+                if row[0] == str(filing_date_time):
+                    print(row[0])
         
