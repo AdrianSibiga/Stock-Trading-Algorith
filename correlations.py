@@ -3,7 +3,7 @@ import string
 import time
 import datetime
 
-purchase_file = 'test_samples/test_sample_5.csv'
+purchase_file = 'test_samples/test_sample_100.csv'
 
 # finds filing dates of each purchase in the purchase file and turns them into strings
 with open(purchase_file, 'r') as csvfile:
@@ -55,11 +55,9 @@ with open(purchase_file, 'r') as csvfile:
         
         # puts the filing date into the datetime system so that we can do easy date manipulations by days, months, hours, etc.
         filing_date_time = datetime.datetime.fromisoformat(date+"T"+clock)
-        print(filing_date_time)
 
         with open(stock_data_file, 'r') as csvfile:
             datareader = csv.reader(csvfile)
             for row in datareader:
                 if row[0] == str(filing_date_time):
-                    print(row[0])
-        
+                    print(filing_date_time)
